@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
-router.post('/carInfo', writeCarInfo);
+router.post('/', writeCarInfo);
 
 function writeCarInfo(req, res){
     console.log('getting car info.');
