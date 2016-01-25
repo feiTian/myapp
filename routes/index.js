@@ -40,10 +40,17 @@ function writeCarInfo(req, res){
             console.log(err);
         })
         .on('result', function (r) {
-            if (!r.nid) {
-                return;
+            if(r.changedRows > 0){
+                console.log("update car plate " + req.body.image_id + " successful");
+                res.contentType('json');
+                res.send(JSON.stringify({ rtn: 0, message:"ok" }));
+                res.end();
+            }else{
+                console.log("update car plate " + req.body.image_id + " failed. " + r.message);
+                res.contentType('json');
+                res.send(JSON.stringify({ rtn: -1, message:"failed" }));
+                res.end();
             }
-            console.log(r.carnumber_forepart);
         })
         .on('end', function () {
             //connection.release();
@@ -51,11 +58,6 @@ function writeCarInfo(req, res){
 	}catch(err){
     	console.log(err);
 	}
-
-	console.log("update car plate " + req.body.image_id + " successful");
-	res.contentType('json');
-	res.send(JSON.stringify({ rtn: 0, message:"ok" }));
-	res.end();
 }
 
 String.prototype.endsWith = function (s) {
