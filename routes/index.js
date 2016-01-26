@@ -1,5 +1,6 @@
 var express = require('express');
 var mysql = require('mysql');
+var requestify = require('requestify');
 var router = express.Router();
 var connection = mysql.createConnection({
 //	connectionLimit : 10,
@@ -9,6 +10,7 @@ var connection = mysql.createConnection({
     password: '',
     database: 'test'
 });
+var solr_url = "http://121.201.7.86:18080/ks/test_lpr/deltaimport?command=full-import&entity=solrtext&clean=true&commit=true";
 
 connection.connect();
 
@@ -41,10 +43,15 @@ function writeCarInfo(req, res){
         })
         .on('result', function (r) {
             if(r.changedRows > 0){
+                requestify.get(solr_url).then(function(response) {
+                      console.log("update solr. ");
+                  }
+                );
                 console.log("update car plate " + req.body.image_id + " successful");
                 res.contentType('json');
                 res.send(JSON.stringify({ rtn: 0, message:"ok" }));
                 res.end();
+
             }else{
                 console.log("update car plate " + req.body.image_id + " failed. " + r.message);
                 res.contentType('json');
