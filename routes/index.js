@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     database: 'test'
 });
 var solr_url = "http://121.201.7.86:18080/ks/test_lpr/deltaimport?command=full-import&entity=solrtext&clean=true&commit=true";
-
+var carplate = "carPlate";
 connection.connect();
 
 /* GET home page. */
@@ -30,10 +30,10 @@ function writeCarInfo(req, res){
 		var query;
 		var nid = req.body.image_id.substring(0, req.body.image_id.length - 1);
 		if(req.body.image_id.endsWith('f')){
-			query = connection.query("update carplate set carnumber_forepart='" + req.body.result[0].hphm 
+			query = connection.query("update " + carplate + " set carnumber_forepart='" + req.body.result[0].hphm 
 				+ "', result_json='" + JSON.stringify(req.body) + "' where nid='" + nid +"'");
 		}else if(req.body.image_id.endsWith('b')){
-			query = connection.query("update carplate set carnumber_backpart='" + req.body.result[0].hphm
+			query = connection.query("update " + carplate + "  set carnumber_backpart='" + req.body.result[0].hphm
 				+ "', result_json='" + JSON.stringify(req.body) + "' where nid='" + nid +"'");
 		}
 		console.log(query.sql);
